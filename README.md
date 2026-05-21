@@ -96,8 +96,10 @@ adb devices
 
 ### 4. Install
 
+Download `SupernoteReader.apk` from the [latest release](https://github.com/mihaiCroitoru/SupernoteReader/releases/latest), then:
+
 ```bash
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+adb install -r SupernoteReader.apk
 ```
 
 The `-r` flag reinstalls over an existing version without losing data.
