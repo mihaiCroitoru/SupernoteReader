@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,8 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,7 +31,6 @@ import com.supernote.reader.ui.theme.ReaderFonts
 private val BorderColor = Color(0xFFCCCCCC)
 private val LabelColor = Color(0xFF888888)
 private val fonts = ReaderFonts.keys.toList()
-private val themes = listOf("Light", "Dark")
 
 @Composable
 fun ReaderOptionsSheet(
@@ -47,66 +45,88 @@ fun ReaderOptionsSheet(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth(0.82f)
+            .fillMaxWidth(0.88f)
             .wrapContentHeight()
             .background(Color.White)
             .border(1.dp, Color.Black),
     ) {
-        Column(modifier = Modifier.padding(28.dp)) {
-
-            SectionLabel("Font")
-            Spacer(Modifier.height(10.dp))
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                items(fonts) { name ->
-                    val selected = name == currentFont
-                    val family = ReaderFonts[name] ?: FontFamily.Default
-                    Chip(
-                        label = name,
-                        fontFamily = family,
-                        selected = selected,
-                        onClick = { onFontChange(name) },
-                    )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max)
+                .padding(20.dp),
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+        ) {
+            // Left 2/3 — font grid
+            Column(modifier = Modifier.weight(2f)) {
+                SectionLabel("Font")
+                Spacer(Modifier.height(8.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    fonts.chunked(2).forEach { row ->
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            row.forEach { name ->
+                                val selected = name == currentFont
+                                val family = ReaderFonts[name] ?: FontFamily.Default
+                                Chip(
+                                    label = name,
+                                    fontFamily = family,
+                                    selected = selected,
+                                    onClick = { onFontChange(name) },
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
+                            // pad last row if odd number of fonts
+                            repeat(2 - row.size) { Spacer(Modifier.weight(1f)) }
+                        }
+                    }
                 }
             }
 
-            Spacer(Modifier.height(20.dp))
+            // Vertical divider
+            Box(
+                modifier = Modifier
+                    .width(1.dp)
+                    .fillMaxHeight()
+                    .background(BorderColor),
+            )
 
-            SectionLabel("Size")
-            Spacer(Modifier.height(10.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                SizeButton("-") { onSizeChange(currentSize - 2) }
-                Box(
-                    modifier = Modifier.width(88.dp).height(64.dp).border(1.dp, BorderColor),
-                    contentAlignment = Alignment.Center,
+            // Right 1/3 — theme + size
+            Column(modifier = Modifier.weight(1f)) {
+                SectionLabel("Theme")
+                Spacer(Modifier.height(8.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf("Light", "Dark").forEach { name ->
+                        val selected = if (name == "Dark") isDark else !isDark
+                        Chip(
+                            label = name,
+                            selected = selected,
+                            onClick = { onThemeChange(name == "Dark") },
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(16.dp))
+
+                SectionLabel("Size")
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Text(text = "$currentSize", fontSize = 22.sp, color = Color.Black)
-                }
-                SizeButton("+") { onSizeChange(currentSize + 2) }
-                Spacer(Modifier.width(16.dp))
-                Text(
-                    text = "The quick brown fox…",
-                    fontSize = currentSize.sp,
-                    color = LabelColor,
-                    maxLines = 1,
-                )
-            }
-
-            Spacer(Modifier.height(20.dp))
-
-            SectionLabel("Theme")
-            Spacer(Modifier.height(10.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                themes.forEach { name ->
-                    val selected = if (name == "Dark") isDark else !isDark
-                    Chip(
-                        label = name,
-                        selected = selected,
-                        onClick = { onThemeChange(name == "Dark") },
-                    )
+                    SizeButton("-") { onSizeChange(currentSize - 2) }
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(40.dp)
+                            .border(1.dp, BorderColor),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text("$currentSize", fontSize = 18.sp, color = Color.Black)
+                    }
+                    SizeButton("+") { onSizeChange(currentSize + 2) }
                 }
             }
-
-            Spacer(Modifier.height(16.dp))
         }
 
         Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(BorderColor))
@@ -149,10 +169,11 @@ private fun Chip(
     selected: Boolean,
     onClick: () -> Unit,
     fontFamily: FontFamily = FontFamily.Default,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
-            .height(52.dp)
+        modifier = modifier
+            .height(40.dp)
             .border(
                 width = if (selected) 2.dp else 1.dp,
                 color = if (selected) Color.Black else BorderColor,
@@ -162,13 +183,13 @@ private fun Chip(
                 indication = null,
                 onClick = onClick,
             )
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 12.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = label,
             fontFamily = fontFamily,
-            fontSize = 15.sp,
+            fontSize = 14.sp,
             color = Color.Black,
         )
     }
@@ -183,8 +204,8 @@ private fun SectionLabel(text: String) {
 private fun SizeButton(label: String, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .width(64.dp)
-            .height(64.dp)
+            .width(40.dp)
+            .height(40.dp)
             .border(1.dp, BorderColor)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -193,6 +214,6 @@ private fun SizeButton(label: String, onClick: () -> Unit) {
             ),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text = label, fontSize = 26.sp, color = Color.Black)
+        Text(text = label, fontSize = 22.sp, color = Color.Black)
     }
 }

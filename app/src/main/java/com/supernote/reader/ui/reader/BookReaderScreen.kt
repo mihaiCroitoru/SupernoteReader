@@ -64,6 +64,7 @@ fun BookReaderScreen(
 
     LaunchedEffect(Unit) {
         PageTurnRelay.flow.collect { keyCode ->
+            if (showOptions || showToc) return@collect
             when (keyCode) {
                 310,  // ratta-slide forward (scan 249 / F30)
                 KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_PAGE_DOWN -> vm.nextPage()
