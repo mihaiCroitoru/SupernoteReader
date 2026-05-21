@@ -39,4 +39,9 @@ curl -fsSL "$BASE_AT/AtkinsonHyperlegible-Regular.ttf" -o "$FONT_DIR/atkinson_re
 curl -fsSL "$BASE_AT/AtkinsonHyperlegible-Italic.ttf"  -o "$FONT_DIR/atkinson_italic.ttf"
 curl -fsSL "$BASE_AT/AtkinsonHyperlegible-Bold.ttf"    -o "$FONT_DIR/atkinson_bold.ttf"
 
+BASE_OD="https://raw.githubusercontent.com/antijingoist/opendyslexic/main/compiled"
+curl -fsSL "$BASE_OD/OpenDyslexic-Regular.otf" -o "$FONT_DIR/opendyslexic_regular.otf"
+curl -fsSL "$BASE_OD/OpenDyslexic-Italic.otf"  -o "$FONT_DIR/opendyslexic_italic.otf"
+curl -fsSL "$BASE_OD/OpenDyslexic-Bold.otf"    -o "$FONT_DIR/opendyslexic_bold.otf"
+
 echo "✓ Setup complete. Open in Android Studio and build."

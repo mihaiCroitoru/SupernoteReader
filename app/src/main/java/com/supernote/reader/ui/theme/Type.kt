@@ -37,10 +37,17 @@ val AtkinsonFamily = FontFamily(
     Font(R.font.atkinson_bold, FontWeight.Bold),
 )
 
+val OpenDyslexicFamily = FontFamily(
+    Font(R.font.opendyslexic_regular, FontWeight.Normal),
+    Font(R.font.opendyslexic_italic, FontWeight.Normal, FontStyle.Italic),
+    Font(R.font.opendyslexic_bold, FontWeight.Bold),
+)
+
 val ReaderFonts = mapOf(
-    "Literata"     to LiterataFamily,
-    "Merriweather" to MerriweatherFamily,
-    "Lora"         to LoraFamily,
-    "Source Serif" to SourceSerifFamily,
-    "Atkinson"     to AtkinsonFamily,
+    "Literata"      to LiterataFamily,
+    "Merriweather"  to MerriweatherFamily,
+    "Lora"          to LoraFamily,
+    "Source Serif"  to SourceSerifFamily,
+    "Atkinson"      to AtkinsonFamily,
+    "OpenDyslexic"  to OpenDyslexicFamily,
 )

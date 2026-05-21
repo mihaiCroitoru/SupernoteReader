@@ -185,6 +185,6 @@ class BookReaderViewModel(
     }
 
     fun setFont(name: String) = viewModelScope.launch { progressStore.saveFont(name) }
-    fun setFontSize(size: Int) = viewModelScope.launch { progressStore.saveSize(size.coerceIn(14, 28)) }
+    fun setFontSize(size: Int) = viewModelScope.launch { progressStore.saveSize(size.coerceIn(14, 40)) }
     fun setTheme(dark: Boolean) = viewModelScope.launch { progressStore.saveTheme(bookPath, dark) }
 }
