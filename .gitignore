@@ -1,0 +1,21 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+*.jks
+
+# Downloaded by setup.sh — not committed
+gradle/wrapper/gradle-wrapper.jar
+app/src/main/res/font/
+
+# Kotlin build cache
+.kotlin/
+
+# Internal planning docs
+/plan
