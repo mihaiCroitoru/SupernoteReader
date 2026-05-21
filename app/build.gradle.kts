@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "com.supernote.reader"
         minSdk = 30
-        targetSdk = 30
+        targetSdk = 34
         versionCode = 17
         versionName = "1.5.0"
     }
