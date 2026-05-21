@@ -19,3 +19,6 @@ app/src/main/res/font/
 
 # Internal planning docs
 /plan
+
+# Ignore debug APKs in release folder
+/apk/*-debug.apk
